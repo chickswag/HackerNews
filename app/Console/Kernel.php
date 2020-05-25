@@ -24,7 +24,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        //fetch posts
+        $schedule->call('App\Http\Controllers\PostsController@fetchPosts')->everyMinute()->name('Fetch Hacker News Posts')->withoutOverlapping();
+
     }
 
     /**

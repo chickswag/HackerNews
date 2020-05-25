@@ -13,6 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::get('/Posts', function () {
+    return view('Posts.posts');
+});
+
+Route::redirect('/', '/Posts');
+
+Route::prefix('api')->group(function() {
+    Route::resource('tasks', 'PostController');
+
 });
