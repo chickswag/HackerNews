@@ -1,0 +1,23 @@
+[2020-05-25 13:25:05] production.ERROR: file_get_contents(/home/nomsa/PhpstormProjects/HackerNews/.env): failed to open stream: No such file or directory {"exception":"[object] (ErrorException(code: 0): file_get_contents(/home/nomsa/PhpstormProjects/HackerNews/.env): failed to open stream: No such file or directory at /home/nomsa/PhpstormProjects/HackerNews/vendor/laravel/framework/src/Illuminate/Foundation/Console/KeyGenerateCommand.php:96)
+[stacktrace]
+#0 [internal function]: Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'file_get_conten...', '/home/nomsa/Php...', 96, Array)
+#1 /home/nomsa/PhpstormProjects/HackerNews/vendor/laravel/framework/src/Illuminate/Foundation/Console/KeyGenerateCommand.php(96): file_get_contents('/home/nomsa/Php...')
+#2 /home/nomsa/PhpstormProjects/HackerNews/vendor/laravel/framework/src/Illuminate/Foundation/Console/KeyGenerateCommand.php(80): Illuminate\\Foundation\\Console\\KeyGenerateCommand->writeNewEnvironmentFileWith('base64:swIjK9Rz...')
+#3 /home/nomsa/PhpstormProjects/HackerNews/vendor/laravel/framework/src/Illuminate/Foundation/Console/KeyGenerateCommand.php(45): Illuminate\\Foundation\\Console\\KeyGenerateCommand->setKeyInEnvironmentFile('base64:swIjK9Rz...')
+#4 [internal function]: Illuminate\\Foundation\\Console\\KeyGenerateCommand->handle()
+#5 /home/nomsa/PhpstormProjects/HackerNews/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(33): call_user_func_array(Array, Array)
+#6 /home/nomsa/PhpstormProjects/HackerNews/vendor/laravel/framework/src/Illuminate/Container/Util.php(36): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#7 /home/nomsa/PhpstormProjects/HackerNews/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(91): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#8 /home/nomsa/PhpstormProjects/HackerNews/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#9 /home/nomsa/PhpstormProjects/HackerNews/vendor/laravel/framework/src/Illuminate/Container/Container.php(592): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#10 /home/nomsa/PhpstormProjects/HackerNews/vendor/laravel/framework/src/Illuminate/Console/Command.php(134): Illuminate\\Container\\Container->call(Array)
+#11 /home/nomsa/PhpstormProjects/HackerNews/vendor/symfony/console/Command/Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#12 /home/nomsa/PhpstormProjects/HackerNews/vendor/laravel/framework/src/Illuminate/Console/Command.php(121): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#13 /home/nomsa/PhpstormProjects/HackerNews/vendor/symfony/console/Application.php(912): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#14 /home/nomsa/PhpstormProjects/HackerNews/vendor/symfony/console/Application.php(264): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\KeyGenerateCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#15 /home/nomsa/PhpstormProjects/HackerNews/vendor/symfony/console/Application.php(140): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#16 /home/nomsa/PhpstormProjects/HackerNews/vendor/laravel/framework/src/Illuminate/Console/Application.php(93): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#17 /home/nomsa/PhpstormProjects/HackerNews/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#18 /home/nomsa/PhpstormProjects/HackerNews/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 {main}
+"} 
