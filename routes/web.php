@@ -21,6 +21,6 @@ Route::get('/Posts', function () {
 Route::redirect('/', '/Posts');
 
 Route::prefix('api')->group(function() {
-    Route::resource('tasks', 'PostController');
+    Route::resource('Posts', 'PostController');
 
 });
