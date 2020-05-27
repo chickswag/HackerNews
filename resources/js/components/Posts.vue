@@ -2,9 +2,9 @@
     <div class="card-body">
         <div class="d-flex hacker-bg p-2">
             <span><b class="btn  flex-grow-1"  v-model="title"><img src="https://news.ycombinator.com/y18.gif" title="Hacker News"/> <i class="fa fa-list"></i> {{ title }}</b></span>
-            <span class="btn  flex-grow-1" title="NEW STORIES" @click="newStories()"><i class="fa fa-refresh"></i>&nbsp;&nbsp;&nbsp;New </span>
-            <span class="btn  flex-grow-1" title="TOP STORIES" @click="topStories()"><i class="fa fa-arrow-up"></i>&nbsp;&nbsp;&nbsp;Top</span>
-            <span class="btn  flex-grow-1" title="BEST STORIES" @click="bestStories()"><i class="fa fa-thumbs-up"></i>&nbsp;&nbsp;&nbsp;Best</span>
+            <span class="btn  flex-grow-1" title="NEW STORIES" @click="filterByType('new')"><i class="fa fa-refresh"></i>&nbsp;&nbsp;&nbsp;New </span>
+            <span class="btn  flex-grow-1" title="TOP STORIES" @click="filterByType('top')"><i class="fa fa-arrow-up"></i>&nbsp;&nbsp;&nbsp;Top</span>
+            <span class="btn  flex-grow-1" title="BEST STORIES" @click="filterByType('best')"><i class="fa fa-thumbs-up"></i>&nbsp;&nbsp;&nbsp;Best</span>
         </div>
         <div v-if="posts.length">
             <table class="table table-striped">
@@ -71,9 +71,9 @@
 
         methods: {
             fetchPosts() {
-                axios.get('api/fetchPosts').then((response) => {
-                    this.listPosts();
-                })
+                // axios.get('api/fetchPosts').then((response) => {
+                //     this.listPosts();
+                // })
 
             },
             listPosts() {
@@ -82,13 +82,15 @@
                 })
 
             },
-            bestStories(){},
-            newStories(){},
-            topStories(){},
+            filterByType(type){
+                axios.post('api/StoryType/'+type).then((response) => {
+                    this.posts = response.data.posts;
+                })
+            },
         },
 
         updated() {
-            this.fetchPosts();
+            // this.fetchPosts();
             this.listPosts();
         },
         mounted(){

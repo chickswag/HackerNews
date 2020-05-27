@@ -24,6 +24,7 @@ class Posts extends Migration
             $table->json('comment_ids')->nullable();
             $table->integer('comment_count')->nullable();
             $table->integer('score')->nullable();
+            $table->string('url')->nullable();
             $table->timestamp('updated_at')->default(DB::raw('NULL ON UPDATE CURRENT_TIMESTAMP'))->nullable();
             $table->softDeletes();
         });

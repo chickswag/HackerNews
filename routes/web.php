@@ -24,4 +24,6 @@ Route::prefix('api')->group(function() {
     Route::resource('Posts', 'PostsControllers');
     Route::get('/Posts','PostsControllers@index')->name('posts');
     Route::get('/fetchPosts','PostsControllers@fetchPosts')->name('getposts');
+    Route::get('/StoryType','PostsControllers@filterByType')->name('filter');
+
 });

@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Comments;
 use App\Posts;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Http;
 
 class PostsControllers extends Controller
@@ -21,6 +19,17 @@ class PostsControllers extends Controller
         $posts = Posts::latest()->get();
         return response()->json(['posts'=> $posts, 200]);
     }
+
+    /**
+     * @param $story_type
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function filterByType($story_type)
+    {
+        $posts = Posts::where('type',$story_type)->latest()->get();
+        return response()->json(['posts'=> $posts, 200]);
+    }
+
 
     public function fetchPosts(){
         $posts = Posts::count();
@@ -42,6 +51,7 @@ class PostsControllers extends Controller
                     $post->title        = $story['title'];
                     $post->created_at   = Carbon::createFromTimestamp($story['time']);
                     $post->comment_ids  = isset($story['kids']) ? json_encode($story['kids']):null;
+                    $post->url          = isset($story['url']) ? json_encode($story['url']):null;
                     $post->comment_count= $story['descendants'];
                     $post->score        = $story['score'];
                     $post->type         = $story['story_type'];
@@ -50,7 +60,6 @@ class PostsControllers extends Controller
             }
             //save comments for each posts
             self::saveCommentsForStories();
-
         }
 
     }
@@ -118,18 +127,15 @@ class PostsControllers extends Controller
 
     /**
      * insert comments for post
-     * @return |null
      */
     public static function saveCommentsForStories(){
 
         $commentIds  = Posts::whereNotNull('comment_ids')->get();
         if($commentIds){
-
             foreach ($commentIds as $arrIds){
-                $carrCommentIds = json_decode($arrIds['comment_ids']);
-                foreach ($carrCommentIds as $commentId) {
+                $arrCommentIds = json_decode($arrIds['comment_ids']);
+                foreach ($arrCommentIds as $commentId) {
                     $comments = Http::get('https://hacker-news.firebaseio.com/v0/item/' . $commentId . '.json');
-
                     if ($comments->ok()) {
                         $commentData = $comments->json();
                         $story_comment = new Comments();
@@ -143,7 +149,6 @@ class PostsControllers extends Controller
 
             }
         }
-        return null;
 
     }
 }

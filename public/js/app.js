@@ -1974,26 +1974,27 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    fetchPosts: function fetchPosts() {
-      var _this = this;
-
-      axios.get('api/fetchPosts').then(function (response) {
-        _this.listPosts();
-      });
+    fetchPosts: function fetchPosts() {// axios.get('api/fetchPosts').then((response) => {
+      //     this.listPosts();
+      // })
     },
     listPosts: function listPosts() {
-      var _this2 = this;
+      var _this = this;
 
       axios.get('api/Posts').then(function (response) {
-        _this2.posts = response.data.posts;
+        _this.posts = response.data.posts;
       });
     },
-    bestStories: function bestStories() {},
-    newStories: function newStories() {},
-    topStories: function topStories() {}
+    filterByType: function filterByType(type) {
+      var _this2 = this;
+
+      axios.post('api/StoryType/' + type).then(function (response) {
+        _this2.posts = response.data.posts;
+      });
+    }
   },
   updated: function updated() {
-    this.fetchPosts();
+    // this.fetchPosts();
     this.listPosts();
   },
   mounted: function mounted() {
@@ -20284,7 +20285,7 @@ var render = function() {
           attrs: { title: "NEW STORIES" },
           on: {
             click: function($event) {
-              return _vm.newStories()
+              return _vm.filterByType("new")
             }
           }
         },
@@ -20298,7 +20299,7 @@ var render = function() {
           attrs: { title: "TOP STORIES" },
           on: {
             click: function($event) {
-              return _vm.topStories()
+              return _vm.filterByType("top")
             }
           }
         },
@@ -20312,7 +20313,7 @@ var render = function() {
           attrs: { title: "BEST STORIES" },
           on: {
             click: function($event) {
-              return _vm.bestStories()
+              return _vm.filterByType("best")
             }
           }
         },
