@@ -13,13 +13,19 @@ class Posts extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('posts');
         Schema::create('posts', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('title');
-            $table->timestamp('created_at')->useCurrent();
+            $table->integer('post_id')->unique();
+            $table->string('created_by',50);
+            $table->string('type',50);
+            $table->timestamp('created_at');
+            $table->json('comment_ids')->nullable();
+            $table->integer('comment_count')->nullable();
+            $table->integer('score')->nullable();
             $table->timestamp('updated_at')->default(DB::raw('NULL ON UPDATE CURRENT_TIMESTAMP'))->nullable();
             $table->softDeletes();
-//            $table->timestamps();
         });
     }
 

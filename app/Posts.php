@@ -9,4 +9,6 @@ class Posts extends Model
     protected $table = 'posts';
     public $timestamps = true;
     protected $fillable =['title'];
+
+
 }

@@ -1952,15 +1952,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       posts: [],
       post: {
         id: '',
-        title: ''
+        title: '',
+        comment_count: '',
+        score: '',
+        created_by: ''
       },
-      post_id: '',
       title: "Hacker News",
       edit: false,
       pagination: {}
@@ -1970,9 +1977,15 @@ __webpack_require__.r(__webpack_exports__);
     fetchPosts: function fetchPosts() {
       var _this = this;
 
-      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-      axios.get('api/Posts?page=' + page).then(function (response) {
-        _this.posts = response.data.handle_data;
+      axios.get('api/fetchPosts').then(function (response) {
+        _this.listPosts();
+      });
+    },
+    listPosts: function listPosts() {
+      var _this2 = this;
+
+      axios.get('api/Posts').then(function (response) {
+        _this2.posts = response.data.posts;
       });
     },
     bestStories: function bestStories() {},
@@ -1981,9 +1994,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   updated: function updated() {
     this.fetchPosts();
+    this.listPosts();
   },
   mounted: function mounted() {
     this.fetchPosts();
+    this.listPosts();
   }
 });
 
@@ -2001,7 +2016,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.hacker-bg{\n    background-color: #ff6600;\n}\n", ""]);
+exports.push([module.i, "\n.hacker-bg{\n    background-color: #ff6600;\n}\n.small-font{\n    font-size:8pt;\n    color: #828282;\n}\n", ""]);
 
 // exports
 
@@ -20234,24 +20249,34 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card-body" }, [
-    _c(
-      "h4",
-      {
-        staticClass: "card-header mt-4",
-        model: {
-          value: _vm.title,
-          callback: function($$v) {
-            _vm.title = $$v
-          },
-          expression: "title"
-        }
-      },
-      [_c("i", { staticClass: "fa fa-list" }), _vm._v(" " + _vm._s(_vm.title))]
-    ),
-    _vm._v(" "),
-    _c("hr"),
-    _vm._v(" "),
     _c("div", { staticClass: "d-flex hacker-bg p-2" }, [
+      _c("span", [
+        _c(
+          "b",
+          {
+            staticClass: "btn  flex-grow-1",
+            model: {
+              value: _vm.title,
+              callback: function($$v) {
+                _vm.title = $$v
+              },
+              expression: "title"
+            }
+          },
+          [
+            _c("img", {
+              attrs: {
+                src: "https://news.ycombinator.com/y18.gif",
+                title: "Hacker News"
+              }
+            }),
+            _vm._v(" "),
+            _c("i", { staticClass: "fa fa-list" }),
+            _vm._v(" " + _vm._s(_vm.title))
+          ]
+        )
+      ]),
+      _vm._v(" "),
       _c(
         "span",
         {
@@ -20303,10 +20328,24 @@ var render = function() {
             _c(
               "tbody",
               _vm._l(_vm.posts, function(post, index) {
-                return _c("tr", { key: _vm.task.id }, [
+                return _c("tr", { key: post.id }, [
                   _c("td", [_vm._v(_vm._s(index + 1))]),
                   _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(post.title))])
+                  _c("td", [
+                    _vm._v(_vm._s(post.title)),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "small-font" }, [
+                      _vm._v(
+                        _vm._s(post.score) +
+                          " points by " +
+                          _vm._s(post.created_by) +
+                          " | " +
+                          _vm._s(post.comment_count) +
+                          " comment(s)"
+                      )
+                    ])
+                  ])
                 ])
               }),
               0

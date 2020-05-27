@@ -13,10 +13,12 @@ class Comments extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('comments');
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->integer('posts_id');
-            $table->integer('comment');
+            $table->text('comment');
+            $table->text('type');
             $table->softDeletes();
             $table->timestamps();
         });

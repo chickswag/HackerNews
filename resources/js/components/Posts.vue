@@ -1,8 +1,7 @@
 <template>
     <div class="card-body">
-        <h4 class="card-header mt-4"  v-model="title"><i class="fa fa-list"></i> {{ title }}</h4>
-        <hr/>
         <div class="d-flex hacker-bg p-2">
+            <span><b class="btn  flex-grow-1"  v-model="title"><img src="https://news.ycombinator.com/y18.gif" title="Hacker News"/> <i class="fa fa-list"></i> {{ title }}</b></span>
             <span class="btn  flex-grow-1" title="NEW STORIES" @click="newStories()"><i class="fa fa-refresh"></i>&nbsp;&nbsp;&nbsp;New </span>
             <span class="btn  flex-grow-1" title="TOP STORIES" @click="topStories()"><i class="fa fa-arrow-up"></i>&nbsp;&nbsp;&nbsp;Top</span>
             <span class="btn  flex-grow-1" title="BEST STORIES" @click="bestStories()"><i class="fa fa-thumbs-up"></i>&nbsp;&nbsp;&nbsp;Best</span>
@@ -14,9 +13,11 @@
                 </thead>
                 <tbody>
 
-                <tr v-for="(post,index ) in posts" :key="task.id">
+                <tr v-for="(post,index ) in posts" :key="post.id">
                     <td>{{index+1}}</td>
-                    <td>{{ post.title}}</td>
+                    <td>{{ post.title}}<br/>
+                        <span class="small-font">{{ post.score}} points by {{ post.created_by}} | {{ post.comment_count}} comment(s)</span>
+                    </td>
 
                 </tr>
                 </tbody>
@@ -41,6 +42,10 @@
     .hacker-bg{
         background-color: #ff6600;
     }
+    .small-font{
+        font-size:8pt;
+        color: #828282;
+    }
 </style>
 <script>
 
@@ -52,8 +57,11 @@
                 post:{
                     id: '',
                     title: '',
+                    comment_count: '',
+                    score:'',
+                    created_by:'',
+
                 },
-                post_id: '',
                 title : "Hacker News",
                 edit:false,
                 pagination:{},
@@ -62,9 +70,15 @@
         },
 
         methods: {
-            fetchPosts(page = 1) {
-                axios.get('api/Posts?page=' + page).then((response) => {
-                    this.posts = response.data.handle_data;
+            fetchPosts() {
+                axios.get('api/fetchPosts').then((response) => {
+                    this.listPosts();
+                })
+
+            },
+            listPosts() {
+                axios.get('api/Posts').then((response) => {
+                    this.posts = response.data.posts;
                 })
 
             },
@@ -72,11 +86,14 @@
             newStories(){},
             topStories(){},
         },
+
         updated() {
             this.fetchPosts();
+            this.listPosts();
         },
         mounted(){
             this.fetchPosts();
+            this.listPosts();
         },
     }
 </script>

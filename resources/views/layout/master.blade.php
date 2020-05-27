@@ -4,12 +4,14 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <link rel="shortcut icon" href="https://news.ycombinator.com/favicon.ico">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="rss">
         <title>Hacker News Clone</title>
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
         <!-- Styles -->
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/app2.css') }}" rel="stylesheet">
         <link href="{{ asset('css/jquery-confirm/jquery-confirm.css') }}" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="{{ asset('js/jquery.min.js')}}"></script>
