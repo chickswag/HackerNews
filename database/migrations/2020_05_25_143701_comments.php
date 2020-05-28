@@ -19,6 +19,8 @@ class Comments extends Migration
             $table->integer('posts_id');
             $table->text('comment');
             $table->text('type');
+            $table->integer('comment_id')->unique();
+            $table->string('created_by');
             $table->softDeletes();
             $table->timestamps();
         });

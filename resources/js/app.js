@@ -1,8 +1,12 @@
 require('./bootstrap');
-window.Vue = require('vue');
 
-Vue.component( 'Posts',require('./components/Posts.vue').default);
+import Vue from 'vue';
+import Main from "./components/Main";
+import router from  "./router"
 
-const app = new Vue({
+new Vue({
     el: '#app',
-});
+    router,
+    template: '<Main/>',
+    components: {Main}
+})

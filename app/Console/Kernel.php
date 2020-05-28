@@ -25,7 +25,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         //fetch posts
-        $schedule->call('App\Http\Controllers\PostsController@fetchPosts')->everyMinute()->name('Fetch Hacker News Posts')->withoutOverlapping();
+        $schedule->call('App\Http\Controllers\PostsController@fetchPosts')->everyMinute()->name('create posts')->withoutOverlapping();
+        $schedule->call('App\Http\Controllers\PostsController@saveCommentsForStories')->everyMinute()->name('create comments')->withoutOverlapping();
 
     }
 

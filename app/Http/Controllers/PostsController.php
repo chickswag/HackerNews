@@ -3,12 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Comments;
+use App\Jobs\CreateCommentsJob;
+use App\Jobs\GetPostsJob;
+use App\Jobs\RunSchedue;
 use App\Posts;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Http;
 
-class PostsControllers extends Controller
+class PostsController extends Controller
 {
+
+    public function __construct(){
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -30,8 +38,10 @@ class PostsControllers extends Controller
         return response()->json(['posts'=> $posts, 200]);
     }
 
-
-    public function fetchPosts(){
+    /**
+     *
+     */
+    public static function fetchPosts(){
         $posts = Posts::count();
         $total = 30; //for now
 
@@ -48,18 +58,17 @@ class PostsControllers extends Controller
                     $post = new Posts();
                     $post->created_by   = $story['by'];
                     $post->post_id      = $story['id'];
-                    $post->title        = $story['title'];
+                    $post->title        = strip_tags($story['title']);
                     $post->created_at   = Carbon::createFromTimestamp($story['time']);
                     $post->comment_ids  = isset($story['kids']) ? json_encode($story['kids']):null;
-                    $post->url          = isset($story['url']) ? json_encode($story['url']):null;
-                    $post->comment_count= $story['descendants'];
-                    $post->score        = $story['score'];
+                    $post->url          = strip_tags(isset($story['url']) ? json_encode($story['url']):null);
+                    $post->comment_count= isset($story['descendants']) ? $story['descendants']:null;
+                    $post->score        = isset($story['score']) ? $story['score']:null;
                     $post->type         = $story['story_type'];
                     $post->save();
                 }
             }
-            //save comments for each posts
-            self::saveCommentsForStories();
+
         }
 
     }
@@ -133,22 +142,43 @@ class PostsControllers extends Controller
         $commentIds  = Posts::whereNotNull('comment_ids')->get();
         if($commentIds){
             foreach ($commentIds as $arrIds){
-                $arrCommentIds = json_decode($arrIds['comment_ids']);
+                $arrCommentIds =json_decode($arrIds['comment_ids']);
+                $story_comment = [];
+                $dataArray = [];
                 foreach ($arrCommentIds as $commentId) {
                     $comments = Http::get('https://hacker-news.firebaseio.com/v0/item/' . $commentId . '.json');
                     if ($comments->ok()) {
-                        $commentData = $comments->json();
-                        $story_comment = new Comments();
-                        $story_comment->posts_id = $arrIds->id;
-                        $story_comment->comment = $commentData['text'];
-                        $story_comment->type = $commentData['type'];
-                        $story_comment->created_at = Carbon::createFromTimestamp($commentData['time']);
-                        $story_comment->save();
+                        $commentData                      = $comments->json();
+                        $commentExist                     = Comments::where(['comment_id' => $commentData['id']])->count();
+                        if($commentExist == 0 && isset($commentData['text'])){
+                            $story_comment['posts_id']    = $arrIds->id;
+                            $story_comment['comment']     = strip_tags($commentData['text']);
+                            $story_comment['type']        = $commentData['type'];
+                            $story_comment['comment_id']  = $commentData['id'];
+                            $story_comment['created_by']  = $commentData['by'];
+                            $story_comment['created_at']  = Carbon::createFromTimestamp($commentData['time']);
+
+                            array_push($dataArray,$story_comment);
+                        }
                     }
+                }
+                if(count($dataArray) > 0){
+                    Comments::insert($dataArray);
                 }
 
             }
         }
 
     }
+
+    public function getStoryComments($post_id){
+        $comments  = Comments::where('posts_id',$post_id)->latest()->get();
+        return response()->json(['comments'=> $comments, 200]);
+    }
+
+    public static function runScheduleJobInTheBackground(){
+        dispatch(new RunSchedue());
+    }
+
+
 }

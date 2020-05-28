@@ -12,6 +12,7 @@
 
         <!-- Styles -->
         <link href="{{ asset('css/app2.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
         <link href="{{ asset('css/jquery-confirm/jquery-confirm.css') }}" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="{{ asset('js/jquery.min.js')}}"></script>

@@ -15,16 +15,16 @@
                 </tbody>
 
             </table>
+
         </div>
         <div v-else class="mb-4">
-            No posts yet<br/>
+            No Top Stories yet<br/>
         </div>
     </div>
 
 </template>
 
 <script>
-
 
     export default {
         data() {
@@ -46,14 +46,9 @@
         },
 
         methods: {
-            fetchPosts() {
-                axios.get('api/Posts/job').then((response) => {
 
-                })
-
-            },
             listPosts() {
-                axios.get('api/Posts').then((response) => {
+                axios.get('api/Posts/story/top').then((response) => {
                     this.posts = response.data.posts;
                 })
 
@@ -61,19 +56,13 @@
 
         },
 
-        filters: {
-            strippedContent: function(string) {
-                return string.replace(/<\/?[^>]+>/ig, " ");
-            }
-        },
         mounted(){
             this.listPosts();
-            this.fetchPosts()
         },
         updated() {
             this.listPosts();
-            this.fetchPosts()
         },
     }
+
 </script>
 
