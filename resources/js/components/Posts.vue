@@ -15,7 +15,12 @@
                 </tbody>
 
             </table>
-
+            <pagination
+                    v-bind:post="post"
+                    v-on:page:update="updatePage"
+                    v-bind:currentPage="currentPage"
+                    v-bind:pageSize="pageSize">
+            </pagination>
 
 
         </div>
@@ -24,12 +29,7 @@
             No posts yet<br/>
         </div>
 
-        <pagination
-                v-bind:post="post"
-                v-on:page:update="updatePage"
-                v-bind:currentPage="currentPage"
-                v-bind:pageSize="pageSize">
-        </pagination>
+
     </div>
 
 </template>
