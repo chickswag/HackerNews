@@ -77,3 +77,43 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## SETUP
+
+## Steps
+
+clone the repository
+
+Change the DB connections on this file .env
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=HackerNewsPosts_DB
+DB_USERNAME=YOUR USER NAME
+DB_PASSWORD=YOUR PASSWORD
+
+I have attached the populated DB
+
+under the folder /database/seeds
+HackerNews.sql
+
+creating your own DB
+create your schema and update the DB details on the .env file in the root directory then
+run this command
+$ php artisan serve
+$ php artisan migrate
+
+It will give clean DB  structure no data
+
+## THEN
+
+on you project directory run the following commands
+
+Please make sure you have composer and npm installed
+https://getcomposer.org/
+https://nodejs.org/en/
+
+$ composer install
+$ npm run watch-poll
+
+## Finally
+$ php artisan serve
