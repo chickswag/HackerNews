@@ -116,4 +116,5 @@ $ composer install
 $ npm run watch-poll
 
 ## Finally
-$ php artisan serve
+$ php artisan serve 
+ok
