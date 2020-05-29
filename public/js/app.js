@@ -2062,6 +2062,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /***/ }),
 
@@ -2200,14 +2201,15 @@ __webpack_require__.r(__webpack_exports__);
   beforeMount: function beforeMount() {
     this.updatevisiblePosts();
   },
+  created: function created() {
+    this.listPosts(1);
+  },
   methods: {
-    fetchPosts: function fetchPosts() {
-      axios.get('api/Posts/job').then(function (response) {});
-    },
     listPosts: function listPosts() {
       var _this = this;
 
-      axios.get('api/Posts').then(function (response) {
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      axios.get('api/Posts?page=' + page).then(function (response) {
         _this.posts = response.data.posts;
       });
     },
@@ -2251,7 +2253,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   updated: function updated() {
     this.listPosts();
-    this.fetchPosts();
   }
 });
 

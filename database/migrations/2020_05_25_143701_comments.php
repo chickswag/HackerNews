@@ -21,6 +21,8 @@ class Comments extends Migration
             $table->text('type');
             $table->integer('comment_id')->unique();
             $table->string('created_by');
+            $table->integer('belongs_to')->nullable();
+            $table->json('kids')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

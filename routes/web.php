@@ -24,10 +24,11 @@ Route::redirect('/', '/Posts');
 Route::prefix('api')->group(function() {
     Route::resource('Posts', 'PostsController');
     Route::get('/Posts','PostsController@index')->name('posts');
-    Route::get('/fetchPosts','PostsController@fetchPosts')->name('getposts');
-    Route::get('/linkComments','PostsController@saveCommentsForStories')->name('link_comments');
     Route::get('/Posts/story/{type}','PostsController@filterByType')->name('filter');
     Route::get('/Posts/comment/{item}','PostsController@getStoryComments')->name('comments');
-    Route::get('/Posts/job','PostsController@runScheduleJobInTheBackground')->name('schedule');
+    Route::get('/FetchPosts','PostsController@requestPostsToBeAdded')->name('fetch-posts');
+    Route::get('/Comments','PostsController@requestCommentsBelongingToPostsToBeAdded')->name('comments');
+    Route::get('/CommentsReplies','PostsController@getCommentsAndReplies')->name('replies-interaction');
+
 });
 

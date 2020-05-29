@@ -7,7 +7,7 @@
 
                 <tr v-for="(post,index ) in posts" :key="post.id">
                     <td>{{index+1}}</td>
-                    <td>{{ post.title}} <span class="small-font"><a v-bind:href="post.url">{{ post.url}}</a></span><br/>
+                    <td>{{ post.title}} <span class="small-font"> &lbbrk;<a v-bind:href="post.url">{{ post.url}}</a>&rbbrk;</span><br/>
                         <span class="small-font">{{ post.score}} points by {{ post.created_by}}  <router-link :to="'/comment/' + post.id">{{ post.comment_count}} comment(s)</router-link></span>
                     </td>
 
