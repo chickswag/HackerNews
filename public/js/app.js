@@ -2217,6 +2217,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.get('api/FetchPosts').then(function (response) {
+        _this2.listPosts();
+
         _this2.getComments();
       });
     },
@@ -2224,6 +2226,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       axios.get('api/Comments').then(function (response) {
+        _this3.listPosts();
+
         _this3.loadReplies();
       });
     },
@@ -2231,6 +2235,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this4 = this;
 
       axios.get('api/CommentsReplies').then(function (response) {
+        _this4.listPosts();
+
         _this4.listPosts();
       });
     },
