@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Comments;
+use App\Jobs\CommentRepliesJob;
 use App\Jobs\CreateCommentsJob;
 use App\Jobs\GetPostsJob;
 use App\Posts;
@@ -41,7 +42,7 @@ class PostsController extends Controller
      */
     public static function fetchPosts(){
         $posts = Posts::count();
-        $total = 500;
+        $total = 3;
 
         if($posts <= $total){
             $bestStoriesArray   = self::getBestStories();
@@ -179,8 +180,12 @@ class PostsController extends Controller
     }
 
 
-    public function requestCommentsBelongingToPostsToBeAdded(){
+    public static function requestCommentsBelongingToPostsToBeAdded(){
         dispatch(new CreateCommentsJob());
+    }
+
+    public function getCommentsAndReplies(){
+        dispatch(new CommentRepliesJob());
     }
 
 
@@ -213,7 +218,6 @@ class PostsController extends Controller
             }
             if(count($dataArray) > 0){
                 Comments::insert($dataArray);
-
             }
         }
     }
