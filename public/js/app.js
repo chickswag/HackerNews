@@ -1908,6 +1908,7 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue_moments_ago__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-moments-ago */ "./node_modules/vue-moments-ago/src/main.js");
 //
 //
 //
@@ -1934,7 +1935,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    VueMomentsAgo: vue_moments_ago__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   data: function data() {
     return {
       posts: [],
@@ -1979,7 +1984,6 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_moments_ago__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-moments-ago */ "./node_modules/vue-moments-ago/src/main.js");
-//
 //
 //
 //
@@ -2082,6 +2086,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue_moments_ago__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-moments-ago */ "./node_modules/vue-moments-ago/src/main.js");
 //
 //
 //
@@ -2108,7 +2113,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    VueMomentsAgo: vue_moments_ago__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   data: function data() {
     return {
       posts: [],
@@ -2279,6 +2288,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue_moments_ago__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-moments-ago */ "./node_modules/vue-moments-ago/src/main.js");
 //
 //
 //
@@ -2305,7 +2315,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    VueMomentsAgo: vue_moments_ago__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   data: function data() {
     return {
       posts: [],
@@ -41832,11 +41846,15 @@ var render = function() {
                   _c("td", [
                     _vm._v(_vm._s(post.title) + " "),
                     _c("span", { staticClass: "small-font" }, [
-                      _vm._v(" ❲"),
-                      _c("a", { attrs: { href: post.url } }, [
-                        _vm._v(_vm._s(post.url))
-                      ]),
-                      _vm._v("❳")
+                      post.url
+                        ? _c("span", [
+                            _vm._v("❲"),
+                            _c("a", { attrs: { href: post.url } }, [
+                              _vm._v(_vm._s(post.url))
+                            ]),
+                            _vm._v("❳")
+                          ])
+                        : _vm._e()
                     ]),
                     _c("br"),
                     _vm._v(" "),
@@ -41850,6 +41868,15 @@ var render = function() {
                             _vm._s(post.created_by) +
                             "  "
                         ),
+                        _c("vue-moments-ago", {
+                          attrs: {
+                            prefix: "posted",
+                            suffix: "ago",
+                            date: post.created_at,
+                            lang: "en"
+                          }
+                        }),
+                        _vm._v(" "),
                         _c(
                           "router-link",
                           { attrs: { to: "/comment/" + post.id } },
@@ -41925,13 +41952,13 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("tr", [
-                        _c("td", { attrs: { colspan: "2" } }, [
+                        _c("td", [
                           _vm._v(
                             "\n                                " +
                               _vm._s(
                                 _vm._f("strippedContent")(comment.comment)
                               ) +
-                              "\n\n\n                             "
+                              "\n\n                             "
                           )
                         ])
                       ])
@@ -42078,11 +42105,15 @@ var render = function() {
                   _c("td", [
                     _vm._v(_vm._s(post.title) + " "),
                     _c("span", { staticClass: "small-font" }, [
-                      _vm._v(" ❲"),
-                      _c("a", { attrs: { href: post.url } }, [
-                        _vm._v(_vm._s(post.url))
-                      ]),
-                      _vm._v("❳")
+                      post.url
+                        ? _c("span", [
+                            _vm._v("❲"),
+                            _c("a", { attrs: { href: post.url } }, [
+                              _vm._v(_vm._s(post.url))
+                            ]),
+                            _vm._v("❳")
+                          ])
+                        : _vm._e()
                     ]),
                     _c("br"),
                     _vm._v(" "),
@@ -42096,6 +42127,15 @@ var render = function() {
                             _vm._s(post.created_by) +
                             "  "
                         ),
+                        _c("vue-moments-ago", {
+                          attrs: {
+                            prefix: "posted",
+                            suffix: "ago",
+                            date: post.created_at,
+                            lang: "en"
+                          }
+                        }),
+                        _vm._v(" "),
                         _c(
                           "router-link",
                           { attrs: { to: "/comment/" + post.id } },
@@ -42216,11 +42256,15 @@ var render = function() {
                     _c("td", [
                       _vm._v(_vm._s(post.title) + " "),
                       _c("span", { staticClass: "small-font" }, [
-                        _vm._v(" ❲"),
-                        _c("a", { attrs: { href: post.url } }, [
-                          _vm._v(_vm._s(post.url))
-                        ]),
-                        _vm._v("❳")
+                        post.url
+                          ? _c("span", [
+                              _vm._v("❲"),
+                              _c("a", { attrs: { href: post.url } }, [
+                                _vm._v(_vm._s(post.url))
+                              ]),
+                              _vm._v("❳")
+                            ])
+                          : _vm._e()
                       ]),
                       _c("br"),
                       _vm._v(" "),
@@ -42310,11 +42354,15 @@ var render = function() {
                   _c("td", [
                     _vm._v(_vm._s(post.title) + " "),
                     _c("span", { staticClass: "small-font" }, [
-                      _vm._v(" ❲"),
-                      _c("a", { attrs: { href: post.url } }, [
-                        _vm._v(_vm._s(post.url))
-                      ]),
-                      _vm._v("❳")
+                      post.url
+                        ? _c("span", [
+                            _vm._v("❲"),
+                            _c("a", { attrs: { href: post.url } }, [
+                              _vm._v(_vm._s(post.url))
+                            ]),
+                            _vm._v("❳")
+                          ])
+                        : _vm._e()
                     ]),
                     _c("br"),
                     _vm._v(" "),
@@ -42328,6 +42376,15 @@ var render = function() {
                             _vm._s(post.created_by) +
                             "  "
                         ),
+                        _c("vue-moments-ago", {
+                          attrs: {
+                            prefix: "posted",
+                            suffix: "ago",
+                            date: post.created_at,
+                            lang: "en"
+                          }
+                        }),
+                        _vm._v(" "),
                         _c(
                           "router-link",
                           { attrs: { to: "/comment/" + post.id } },

@@ -8,9 +8,8 @@
                          <td>
                              <table  v-for="(comment,index ) in comments" :key="comment.id">
                                  <tr><td><span class="small-font">{{ comment.created_by }}  <vue-moments-ago prefix="posted" suffix="ago" :date="comment.created_at"  lang="en"></vue-moments-ago></span></td></tr>
-                                 <tr><td colspan="2">
+                                 <tr><td >
                                     {{ comment.comment | strippedContent}}
-
 
                                  </td></tr>
                              </table>
