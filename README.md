@@ -45,7 +45,7 @@ https://getcomposer.org/
 
 https://nodejs.org/en/
 
-# Dependancies
+# Dependencies
 $ composer install
 
 $ npm run watch-poll
