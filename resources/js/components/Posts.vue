@@ -72,17 +72,21 @@
             },
             fetchPosts() {
                 axios.get('api/FetchPosts').then((response) => {
+                    this.listPosts();
                     this.getComments();
+
                 })
 
             },
             getComments(){
                 axios.get('api/Comments').then((response) => {
+                    this.listPosts();
                     this.loadReplies();
                 })
             },
             loadReplies(){
                 axios.get('api/CommentsReplies').then((response) => {
+                    this.listPosts();
                     this.listPosts();
                 })
             },
