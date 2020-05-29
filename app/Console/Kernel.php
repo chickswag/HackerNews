@@ -27,6 +27,7 @@ class Kernel extends ConsoleKernel
         //fetch posts
         $schedule->call('App\Http\Controllers\PostsController@fetchPosts')->everyMinute()->name('create posts')->withoutOverlapping();
         $schedule->call('App\Http\Controllers\PostsController@saveCommentsForStories')->everyMinute()->name('create comments')->withoutOverlapping();
+        $schedule->call('App\Http\Controllers\PostsController@saveCommentBelongingToAComment')->everyMinute()->name('create comments')->withoutOverlapping();
 
     }
 
