@@ -2152,6 +2152,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue_moments_ago__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-moments-ago */ "./node_modules/vue-moments-ago/src/main.js");
 //
 //
 //
@@ -2188,7 +2189,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    VueMomentsAgo: vue_moments_ago__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   data: function data() {
     return {
       posts: [],
@@ -2197,7 +2202,8 @@ __webpack_require__.r(__webpack_exports__);
         title: '',
         comment_count: '',
         score: '',
-        created_by: ''
+        created_by: '',
+        created_at: ''
       },
       title: "Hacker News",
       currentPage: 0,
@@ -41639,140 +41645,6 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
-/***/ "./node_modules/vue-filter-date-format/dist/vue-filter-date-format.esm.js":
-/*!********************************************************************************!*\
-  !*** ./node_modules/vue-filter-date-format/dist/vue-filter-date-format.esm.js ***!
-  \********************************************************************************/
-/*! exports provided: default, dateFormat */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "dateFormat", function() { return dateFormat; });
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
-
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
-
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
-***************************************************************************** */
-
-var __assign = function() {
-    __assign = Object.assign || function __assign(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-
-var version = "1.3.1";
-
-var padZeros = function (input, maxLength) {
-    if (maxLength === void 0) { maxLength = 0; }
-    return ("0000" + input).slice(-maxLength);
-};
-var defaultConfig = {
-    dayOfWeekNames: [
-        'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
-        'Friday', 'Saturday'
-    ],
-    dayOfWeekNamesShort: [
-        'Su', 'Mo', 'Tu', 'We', 'Tr', 'Fr', 'Sa'
-    ],
-    monthNames: [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-    ],
-    monthNamesShort: [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ]
-};
-var dateFormat = function (input, format, config) {
-    if (format === void 0) { format = 'YYYY.MM.DD HH:mm:ss'; }
-    if (config === void 0) { config = {}; }
-    config = __assign(__assign({}, defaultConfig), config);
-    var year = input.getFullYear();
-    var month = input.getMonth() + 1;
-    var date = input.getDate();
-    var hours24 = input.getHours();
-    var hours12 = hours24 % 12 === 0 ? 12 : hours24 % 12;
-    var minutes = input.getMinutes();
-    var seconds = input.getSeconds();
-    var weekday = input.getDay();
-    return format
-        // Normalize tokens
-        .replace('YYYY', '%01%')
-        .replace('YY', '%02%')
-        .replace('MMMM', '%03%')
-        .replace('MMM', '%04%')
-        .replace('MM', '%05%')
-        .replace('M', '%06%')
-        .replace('DD', '%07%')
-        .replace('D', '%08%')
-        .replace('HH', '%09%')
-        .replace('H', '%10%')
-        .replace('hh', '%11%')
-        .replace('h', '%12%')
-        .replace('mm', '%13%')
-        .replace('m', '%14%')
-        .replace('ss', '%15%')
-        .replace('s', '%16%')
-        .replace('A', '%17%')
-        .replace('a', '%18%')
-        .replace('dddd', '%19%')
-        .replace('dd', '%20%')
-        .replace('d', '%21%')
-        // Insert values
-        .replace('%01%', padZeros(year, 4))
-        .replace('%02%', padZeros(year % 100, 2))
-        .replace('%03%', config.monthNames[month - 1])
-        .replace('%04%', config.monthNamesShort[month - 1])
-        .replace('%05%', padZeros(month, 2))
-        .replace('%06%', "" + month)
-        .replace('%07%', padZeros(date, 2))
-        .replace('%08%', "" + date)
-        .replace('%09%', padZeros(hours24, 2))
-        .replace('%10%', "" + hours24)
-        .replace('%11%', padZeros(hours12, 2))
-        .replace('%12%', "" + hours12)
-        .replace('%13%', padZeros(minutes, 2))
-        .replace('%14%', "" + minutes)
-        .replace('%15%', padZeros(seconds, 2))
-        .replace('%16%', "" + seconds)
-        .replace('%17%', hours24 < 12 ? 'AM' : 'PM')
-        .replace('%18%', hours24 < 12 ? 'am' : 'pm')
-        .replace('%19%', config.dayOfWeekNames[weekday])
-        .replace('%20%', config.dayOfWeekNamesShort[weekday])
-        .replace('%21%', "" + weekday);
-};
-
-var main = {
-    install: function (Vue, baseConfig) {
-        Vue.filter('dateFormat', function (date, format, config) {
-            if (config === void 0) { config = {}; }
-            return dateFormat(date, format, __assign(__assign({}, baseConfig), config));
-        });
-    },
-    version: version
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (main);
-
-
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/index.js?!./node_modules/vue-moments-ago/src/components/moments-ago.vue?vue&type=script&lang=js&":
 /*!************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib??vue-loader-options!./node_modules/vue-moments-ago/src/components/moments-ago.vue?vue&type=script&lang=js& ***!
@@ -42042,7 +41914,7 @@ var render = function() {
                                 attrs: {
                                   prefix: "posted",
                                   suffix: "ago",
-                                  date: "comment.created_at",
+                                  date: comment.created_at,
                                   lang: "en"
                                 }
                               })
@@ -42362,6 +42234,15 @@ var render = function() {
                               _vm._s(post.created_by) +
                               "  "
                           ),
+                          _c("vue-moments-ago", {
+                            attrs: {
+                              prefix: "posted",
+                              suffix: "ago",
+                              date: post.created_at,
+                              lang: "en"
+                            }
+                          }),
+                          _vm._v(" "),
                           _c(
                             "router-link",
                             { attrs: { to: "/comment/" + post.id } },
@@ -57772,7 +57653,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Main__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Main */ "./resources/js/components/Main.vue");
 /* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./router */ "./resources/js/router/index.js");
 /* harmony import */ var _components_Pagination__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Pagination */ "./resources/js/components/Pagination.vue");
-/* harmony import */ var vue_filter_date_format__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-filter-date-format */ "./node_modules/vue-filter-date-format/dist/vue-filter-date-format.esm.js");
+/* harmony import */ var vue_moments_ago__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-moments-ago */ "./node_modules/vue-moments-ago/src/main.js");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
@@ -57786,10 +57667,11 @@ new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   router: _router__WEBPACK_IMPORTED_MODULE_2__["default"],
   template: '<Main/>',
   components: {
-    'Main': _components_Main__WEBPACK_IMPORTED_MODULE_1__["default"]
+    'Main': _components_Main__WEBPACK_IMPORTED_MODULE_1__["default"],
+    'VueMomentsAgo': vue_moments_ago__WEBPACK_IMPORTED_MODULE_4__["default"],
+    'pagination': _components_Pagination__WEBPACK_IMPORTED_MODULE_3__["default"]
   }
 });
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_filter_date_format__WEBPACK_IMPORTED_MODULE_4__["default"]);
 
 /***/ }),
 
