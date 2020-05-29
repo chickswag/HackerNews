@@ -5,6 +5,7 @@ import Main from "./components/Main";
 import router from  "./router";
 import pagination from "./components/Pagination";
 Vue.component( 'pagination',require('./components/Pagination.vue').default);
+import VueFilterDateFormat from 'vue-filter-date-format'
 
 new Vue({
     el: '#app',
@@ -14,3 +15,4 @@ new Vue({
         'Main': Main,
     }
 })
+Vue.use(VueFilterDateFormat);

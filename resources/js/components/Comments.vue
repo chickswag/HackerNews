@@ -7,7 +7,7 @@
                     <tr>
                          <td>
                              <table  v-for="(comment,index ) in comments" :key="comment.id">
-                                 <tr><td><span class="small-font">{{ comment.created_by }}  {{ comment.created_at}}</span></td></tr>
+                                 <tr><td><span class="small-font">{{ comment.created_by }}  {{ comment.created_at | dateFormat('YYYY.MM.DD') }}</span></td></tr>
                                  <tr><td colspan="2">
                                     {{ comment.comment | strippedContent}}
                                  </td></tr>
