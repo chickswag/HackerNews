@@ -52,3 +52,5 @@ $ npm run watch-poll
 
 ## Finally
 $ php artisan serve 
+
+$ php artisan schedule:run
