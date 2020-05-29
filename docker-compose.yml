@@ -1,26 +1,37 @@
-Version: 2
+version: "3"
 services:
+
   web:
     build:
       context: .
       dockerfile: Dockerfile
-      environment:
-        - MYSQL_DATABASE=dbname
-        - MYSQL_USER=dbuser
-        - MYSQL_PASSWOR=PASS
-        - MYSQL_HOST=127.0.0.1
-      ports:
-        - "8080:80"
-      volumes:
-        - .:/var/www
-      depends_on:
-        - db
+    environment:
+      - MYSQL_DATABASE=HackerNewsPosts_DB
+      - MYSQL_USER=Smartz
+      - MYSQL_PASSWOR=Devbox-123
+      - MYSQL_HOST=127.0.0.1
 
-      db:
-        image: mysql:5.7
-        ports:
-          -"6603:3306"
-        environment:
-          - MYSQL_DATABASE=dbname
-          - MYSQL_USER=dbuser
-          - MYSQL_PASSWOR=PASS
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    ports:
+      - "6603:3306"
+    environment:
+
+      - MYSQL_DATABASE=HackerNewsPosts_DB
+      - MYSQL_USER=Smartz
+      - MYSQL_PASSWOR=Devbox-123
+      - MYSQL_HOST=127.0.0.1
+      -
+    volumes:
+      - "mysql_data:/var/lib/mysql"
+      - ./data/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+volumes:
+  mysql_data: { driver: local }

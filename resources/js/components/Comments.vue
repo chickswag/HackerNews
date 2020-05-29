@@ -7,9 +7,11 @@
                     <tr>
                          <td>
                              <table  v-for="(comment,index ) in comments" :key="comment.id">
-                                 <tr><td><span class="small-font">{{ comment.created_by }}  {{ comment.created_at | dateFormat('YYYY.MM.DD') }}</span></td></tr>
+                                 <tr><td><span class="small-font">{{ comment.created_by }}  <vue-moments-ago prefix="posted" suffix="ago" date="comment.created_at" lang="en"></vue-moments-ago></span></td></tr>
                                  <tr><td colspan="2">
                                     {{ comment.comment | strippedContent}}
+
+
                                  </td></tr>
                              </table>
                          </td>
@@ -24,7 +26,11 @@
     </div>
 </template>
 <script>
+    import VueMomentsAgo from 'vue-moments-ago'
     export default {
+        components: {
+            VueMomentsAgo
+        },
         data() {
             return {
                 comments: [],
@@ -35,7 +41,6 @@
                     created_at: ''
 
                 },
-
             };
         },
 
