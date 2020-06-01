@@ -12,7 +12,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ## Steps
 
-##clone the repository
+## clone the repository
 
 Open your terminal,
 
@@ -38,14 +38,14 @@ HCNewsDB.sql
 creating your own DB
 create your schema and update the DB details on the .env file in the root directory 
 
-#Then
+## Then
 run this command
 
 $ php artisan migrate
 
 It will give clean DB  structure no data
 
-## THEN
+## Then
 
 on you project directory run the following commands
 
