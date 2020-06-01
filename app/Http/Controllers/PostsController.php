@@ -15,56 +15,73 @@ class PostsController extends Controller
 
     public function __construct(){
 
+//        $this->saveCommentBelongingToAComment();
+//        $this->saveCommentsForStories();
+//        $this->fetchPosts();
     }
+
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return array|string
+     * @throws \Throwable
      */
     public function index()
     {
-        $posts = Posts::latest()->get();
-        return response()->json(['posts'=> $posts, 200]);
+        $posts = Posts::latest()->paginate(30);
+        return view('Posts.posts', compact('posts'))->render();
     }
 
     /**
      * @param $story_type
-     * @return \Illuminate\Http\JsonResponse
+     * @return array|string
+     * @throws \Throwable
      */
     public function filterByType($story_type)
     {
-        $posts = Posts::where('type',$story_type)->latest()->get();
-        return response()->json(['posts'=> $posts, 200]);
+        $posts = Posts::where('type',$story_type)->paginate(30);
+        switch ($story_type){
+            case 'new':
+                return view('Posts.new', compact('posts'))->render();
+                break;
+            case 'best':
+                return view('Posts.best', compact('posts'))->render();
+                break;
+            case 'top':
+                return view('Posts.top', compact('posts'))->render();
+                break;
+            default:
+                return view('Posts.posts', compact('posts'))->render();
+        }
     }
 
     /**
      *
      */
     public static function fetchPosts(){
-        $posts = Posts::count();
-        $total = 3;
-
-        if($posts <= $total){
-            $bestStoriesArray   = self::getBestStories();
-            $topStoriesArray    = self::getTopStories();
-            $newStoriesArray    = self::getNewStories();
-
-            $arrAllStories = array_merge($bestStoriesArray,$topStoriesArray,$newStoriesArray);
-
+        $posts      = Posts::get();
+        $postCount  = $posts->count();
+        $total      = 500;
+        if($postCount <= $total){
+            $newStoriesArray                        = self::getNewStories();
+            $topStoriesArray                        = self::getTopStories();
+            $bestStoriesArray                       = self::getBestStories();
+            $arrAllStories                          = array_merge($newStoriesArray,$topStoriesArray,$bestStoriesArray);
             foreach ($arrAllStories as $story){
-                $postExist= Posts::where(['post_id' => $story['id']])->count();
+                $postExist                          = Posts::where(['post_id' => $story['id']])->count();
                 if($postExist == 0){
-                    $post = new Posts();
-                    $post->created_by   = $story['by'];
-                    $post->post_id      = $story['id'];
-                    $post->title        = strip_tags($story['title']);
-                    $post->created_at   = Carbon::createFromTimestamp($story['time']);
-                    $post->comment_ids  = isset($story['kids']) ? json_encode($story['kids']):null;
-                    $post->url          = isset($story['url']) ? trim(stripslashes((string)strip_tags($story['url']))):null;
-                    $post->comment_count= isset($story['descendants']) ? $story['descendants']:null;
-                    $post->score        = isset($story['score']) ? $story['score']:null;
-                    $post->type         = $story['story_type'];
-                    $post->save();
+                    $count                          = Posts::count();
+                    $postsData                      = [];
+                    if($count <= $total){
+                        $postsData['created_by']    = $story['by'];
+                        $postsData['post_id']       = $story['id'];
+                        $postsData['title']         = strip_tags($story['title']);
+                        $postsData['created_at']    = Carbon::createFromTimestamp($story['time']);
+                        $postsData['comment_ids']   = isset($story['kids']) ? json_encode($story['kids']):null;
+                        $postsData['url']           = isset($story['url']) ? trim(stripslashes((string)strip_tags($story['url']))):null;
+                        $postsData['comment_count'] = isset($story['descendants']) ? $story['descendants']:null;
+                        $postsData['score']         = isset($story['score']) ? $story['score']:null;
+                        $postsData['type']          = $story['story_type'];
+                        Posts::insert($postsData);
+                    }
                 }
             }
 
@@ -77,16 +94,15 @@ class PostsController extends Controller
      * @return array
      */
     public static function getBestStories(){
-        $allBestStories     = [];
-        $bestStories        = Http::get('https://hacker-news.firebaseio.com/v0/beststories.json?orderBy=%22$key%22&limitToFirst=150');
-
-        if($bestStories->ok()){
-            $arrBestStories     = $bestStories->json();
-            foreach($arrBestStories as $storyId){
-                $storyPost  = Http::get('https://hacker-news.firebaseio.com/v0/item/'.$storyId.'.json');
-                $storyData  = $storyPost->json();
-                $storyData['story_type'] = "best";
-                array_push($allBestStories,$storyData);
+        $allBestStories             = [];
+        $arrBestStories             = self::connectionAttempt('https://hacker-news.firebaseio.com/v0/beststories.json?orderBy=%22$key%22&limitToFirst=100');
+        if ($arrBestStories) {
+            foreach ($arrBestStories as $storyId) {
+                $storyData          = self::connectionAttempt('https://hacker-news.firebaseio.com/v0/item/' . $storyId . '.json');
+                if (!empty($storyData)) {
+                    $storyData['story_type'] = "best";
+                    array_push($allBestStories, $storyData);
+                }
             }
         }
         return $allBestStories;
@@ -97,20 +113,18 @@ class PostsController extends Controller
      * @return array
      */
     public static function getNewStories(){
-        $allNewStories      = [];
-        $newStories         = Http::get('https://hacker-news.firebaseio.com/v0/newstories.json?orderBy=%22$key%22&limitToFirst=200');
-
-        if($newStories->ok()){
-            $arrNewStories      = $newStories->json();
-            foreach($arrNewStories as $storyId){
-                $storyPost  = Http::get('https://hacker-news.firebaseio.com/v0/item/'.$storyId.'.json');
-                $storyData  = $storyPost->json();
-                $storyData['story_type'] = "new";
-                array_push($allNewStories,$storyData);
+        $allNewStories          = [];
+        $arrNewStories          = self::connectionAttempt('https://hacker-news.firebaseio.com/v0/newstories.json?orderBy=%22$key%22&limitToFirst=220');
+        if ($arrNewStories) {
+            foreach ($arrNewStories as $storyId) {
+                $storyData      = self::connectionAttempt('https://hacker-news.firebaseio.com/v0/item/' . $storyId . '.json');
+                if (!empty($storyData)) {
+                    $storyData['story_type'] = "new";
+                    array_push($allNewStories, $storyData);
+                }
             }
         }
         return $allNewStories;
-
     }
 
     /**
@@ -119,15 +133,15 @@ class PostsController extends Controller
      */
     public static function getTopStories(){
         $allTopStories      = [];
-        $topStories         = Http::get('https://hacker-news.firebaseio.com/v0/topstories.json?orderBy=%22$key%22&limitToFirst=150');
-
-        if($topStories->ok()){
-            $arrTopStories     = $topStories->json();
-            foreach($arrTopStories as $storyId){
-                $storyPost  = Http::get('https://hacker-news.firebaseio.com/v0/item/'.$storyId.'.json');
-                $storyData  = $storyPost->json();
-                $storyData['story_type'] = "top";
-                array_push($allTopStories,$storyData);
+        $arrTopStories      = self::connectionAttempt('https://hacker-news.firebaseio.com/v0/topstories.json?orderBy=%22$key%22&limitToFirst=220');
+        if ($arrTopStories)
+        {
+            foreach ($arrTopStories as $storyId) {
+                $storyData = self::connectionAttempt('https://hacker-news.firebaseio.com/v0/item/' . $storyId . '.json');
+                if (!empty($storyData)) {
+                    $storyData['story_type'] = "top";
+                    array_push($allTopStories, $storyData);
+                }
             }
         }
         return $allTopStories;
@@ -140,30 +154,28 @@ class PostsController extends Controller
 
         $commentIds  = Posts::whereNotNull('comment_ids')->get();
         if($commentIds){
-            foreach ($commentIds as $arrIds){
-                $arrCommentIds =json_decode($arrIds['comment_ids']);
-                $story_comment = [];
-                $dataArray = [];
+            foreach ($commentIds as $arrIds) {
+                $arrCommentIds                          = json_decode($arrIds['comment_ids']);
+
                 foreach ($arrCommentIds as $commentId) {
-                    $comments = Http::get('https://hacker-news.firebaseio.com/v0/item/' . $commentId . '.json');
-                    if ($comments->ok()) {
-                        $commentData                      = $comments->json();
-                        $commentExist                     = Comments::where(['comment_id' => $commentData['id']])->count();
-                        if($commentExist == 0 && isset($commentData['text'])){
-                            $story_comment['posts_id']    = $arrIds->id;
-                            $story_comment['comment']     = htmlspecialchars(strip_tags($commentData['text']));
-                            $story_comment['type']        = $commentData['type'];
-                            $story_comment['comment_id']  = $commentData['id'];
-                            $story_comment['created_by']  = $commentData['by'];
-                            $story_comment['belongs_to']  = isset($commentData['parent']) ? $commentData['parent']:null;
-                            $story_comment['kids']        = isset($commentData['kids']) ? json_encode($commentData['kids']):null;
-                            $story_comment['created_at']  = Carbon::createFromTimestamp($commentData['time']);
-                            array_push($dataArray,$story_comment);
+                    $commentData                        = self::connectionAttempt('https://hacker-news.firebaseio.com/v0/item/' . $commentId . '.json');
+                    if(!empty($commentData))
+                    {
+                        $commentExist                       = Comments::where(['comment_id' => $commentData['id']])->count();
+                        $story_comment = [];
+                        if ($commentExist == 0 && isset($commentData['text'])) {
+                            $story_comment['posts_id']      = $arrIds->id;
+                            $story_comment['comment']       = strip_tags($commentData['text']);
+                            $story_comment['type']          = $commentData['type'];
+                            $story_comment['comment_id']    = $commentData['id'];
+                            $story_comment['created_by']    = $commentData['by'];
+                            $story_comment['belongs_to']    = isset($commentData['parent']) ? $commentData['parent'] : null;
+                            $story_comment['kids'] = isset($commentData['kids']) ? json_encode($commentData['kids']) : null;
+                            $story_comment['created_at'] = Carbon::createFromTimestamp($commentData['time']);
+                            Comments::create($story_comment);
                         }
                     }
-                }
-                if(count($dataArray) > 0){
-                    Comments::insert($dataArray);
+
                 }
             }
         }
@@ -171,56 +183,92 @@ class PostsController extends Controller
     }
 
     public function getStoryComments($post_id){
-        $comments  = Comments::where('posts_id',$post_id)->latest()->get();
-        return response()->json(['comments'=> $comments, 200]);
+        $originalPost   = Posts::find($post_id);
+        $comments       = Comments::where('posts_id',$post_id)->latest()->get();
+
+        return view('Comments.comments', compact('originalPost','comments'))->render();
     }
 
-    public static function requestPostsToBeAdded(){
-        dispatch(new GetPostsJob());
-    }
-
-
-    public static function requestCommentsBelongingToPostsToBeAdded(){
-        dispatch(new CreateCommentsJob());
-    }
-
-    public function getCommentsAndReplies(){
-        dispatch(new CommentRepliesJob());
-    }
-
-
+    /**
+     *
+     */
     public static function saveCommentBelongingToAComment(){
         $commentKidsIds  = Comments::whereNotNull('kids')->get();
         if($commentKidsIds){
             foreach ($commentKidsIds as $arrIds){
-                $arrCommentkidIds =json_decode($arrIds['kids']);
-                $story_comment    = [];
-                $dataArray        = [];
+                $arrCommentkidIds                           =json_decode($arrIds['kids']);
+
                 foreach ($arrCommentkidIds as $commentKidId) {
-                    $comments = Http::get('https://hacker-news.firebaseio.com/v0/item/' . $commentKidId . '.json');
-                    if ($comments->ok()) {
-                        $commentData = $comments->json();
-                        $commentExist                     = Comments::where(['comment_id' => $commentData['id']])->count();
-                        if($commentExist == 0 && isset($commentData['text'])){
+                    $commentData                            = self::connectionAttempt('https://hacker-news.firebaseio.com/v0/item/' . $commentKidId . '.json');
+                    if(!empty($commentData))
+                    {
+                        $commentExist                       = Comments::where(['comment_id' => $commentData['id']])->count();
+                        $story_comment                      = [];
+                        if ($commentExist == 0 && isset($commentData['text'])) {
                             $story_comment['posts_id']      = $arrIds['posts_id'];
-                            $story_comment['comment']       = htmlspecialchars(strip_tags($commentData['text']));
-                            $story_comment['belongs_to']    = isset( $arrIds['parent']) ? $arrIds['parent'] : null;
+                            $story_comment['comment']       = strip_tags($commentData['text']);
+                            $story_comment['belongs_to']    = isset($arrIds['parent']) ? $arrIds['parent'] : null;
                             $story_comment['type']          = $commentData['type'];
                             $story_comment['comment_id']    = $commentData['id'];
                             $story_comment['created_by']    = $commentData['by'];
                             $story_comment['kids']          = isset($commentData['kids']) ? json_encode($commentData['kids']) : null;
                             $story_comment['created_at']    = Carbon::createFromTimestamp($commentData['time']);
-                            array_push($dataArray, $story_comment);
+                            Comments::create($story_comment);
                         }
-
                     }
-                }
+
+                 }
+
+             }
+         }
+    }
+
+    /**
+     * @param $url
+     * @return array
+     */
+    public static function connectionAttempt($url)
+    {
+        $failAttempt = 0;
+        try {
+            $data = Http::get($url);
+            if ($data->ok()) {
+                return $data->json();
             }
-            if(count($dataArray) > 0){
-                Comments::insert($dataArray);
+        }
+        catch (\Exception $e) {
+
+            if ($failAttempt === 5) {
+                $failAttempt = 0;
+                return [];
+            }
+            else {
+                $failAttempt ++;
+                sleep(300);
+                self::connectionAttempt($url);
             }
         }
     }
 
+    /**
+     *
+     */
+    public static function requestPostsToBeAdded(){
+        dispatch(new GetPostsJob());
+    }
+
+    /**
+     *
+     */
+    public static function requestCommentsBelongingToPostsToBeAdded(){
+        dispatch(new CreateCommentsJob());
+    }
+
+    /**
+     *
+     */
+    public function getCommentsAndReplies(){
+        dispatch(new CommentRepliesJob());
+    }
 
 }

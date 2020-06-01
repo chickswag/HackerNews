@@ -8,7 +8,7 @@ class Comments extends Model
 {
     protected $table = 'comments';
     public $timestamps = true;
-    protected $fillable =['post_id','comment','type','created_at','comment_id','created_by','belongs_to','kids'];
+    protected $fillable =['posts_id','comment','type','created_at','comment_id','created_by','belongs_to','kids'];
 
 
 }

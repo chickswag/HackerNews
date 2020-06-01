@@ -2198,6 +2198,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -42287,11 +42288,24 @@ var render = function() {
                             }
                           }),
                           _vm._v(" "),
-                          _c(
-                            "router-link",
-                            { attrs: { to: "/comment/" + post.id } },
-                            [_vm._v(_vm._s(post.comment_count) + " comment(s)")]
-                          )
+                          post.comment_count
+                            ? _c(
+                                "span",
+                                [
+                                  _c(
+                                    "router-link",
+                                    { attrs: { to: "/comment/" + post.id } },
+                                    [
+                                      _vm._v(
+                                        _vm._s(post.comment_count) +
+                                          " comment(s)"
+                                      )
+                                    ]
+                                  )
+                                ],
+                                1
+                              )
+                            : _vm._e()
                         ],
                         1
                       )

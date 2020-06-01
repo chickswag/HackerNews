@@ -8,7 +8,8 @@
                 <tr v-for="(post,index ) in posts" :key="post.id">
                     <td>{{index+1}}</td>
                     <td>{{ post.title}} <span class="small-font"> <span v-if="post.url">&lbbrk;<a v-bind:href="post.url">{{ post.url}}</a>&rbbrk;</span></span><br/>
-                        <span class="small-font">{{ post.score}} points by {{ post.created_by}}  <vue-moments-ago prefix="posted" suffix="ago" :date="post.created_at"  lang="en"></vue-moments-ago> <router-link :to="'/comment/' + post.id">{{ post.comment_count}} comment(s)</router-link></span>
+                        <span class="small-font">{{ post.score}} points by {{ post.created_by}}  <vue-moments-ago prefix="posted" suffix="ago" :date="post.created_at"  lang="en">
+                        </vue-moments-ago> <span v-if="post.comment_count"><router-link :to="'/comment/' + post.id">{{ post.comment_count}} comment(s)</router-link></span></span>
                     </td>
 
                 </tr>

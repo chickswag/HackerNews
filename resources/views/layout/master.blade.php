@@ -23,6 +23,14 @@
     </head>
     <body>
     <main id="content" class="p-4 p-md-5 pt-5">
+        <div class="d-flex hacker-bg p-2">
+            <span><b class="btn flex-grow-1"><img src="https://news.ycombinator.com/y18.gif"/> <i class="fa fa-list"></i> <a href="{{ route('posts') }}">Hacker News</a></b></span>
+            <span class="btn flex-grow-1"><i class="fa fa-refresh"></i> <a href="{{ route('posts') }}"> Home</a></span>
+            <span class="btn flex-grow-1" ><i class="fa fa-refresh"></i><a href="{{ route('filter','new') }}"> New</a></span>
+            <span class="btn flex-grow-1" ><i class="fa fa-arrow-up"></i> <a href="{{ route('filter','top') }}"> Top</a></span>
+            <span class="btn flex-grow-1" ><i class="fa fa-thumbs-up"></i><a href="{{ route('filter','best') }}"> Best</a></span>
+
+        </div>
         <div class="display-messages">
             @if (count($errors ?? '') > 0)
                 <div class="alert alert-danger">
@@ -53,6 +61,6 @@
 
 
     </main>
-    <script src="{{ asset('js/app.js') }}"></script>
+{{--    <script src="{{ asset('js/app.js') }}"></script>--}}
     </body>
 </html>
